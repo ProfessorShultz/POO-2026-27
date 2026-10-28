@@ -16,8 +16,3 @@ public class Utilizador
     }
 }
 
- public Utilizador(int id)
- {
-        Id = id;
-        
-}
