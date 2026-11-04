@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 
-public class Sistema
 {
     private List<Utilizador> utilizadores;
     private List<Espaco> espacos;
@@ -47,7 +44,7 @@ public class Sistema
     public void AprovarReserva()
     {
         Console.WriteLine("Aprovação de reservas");
-        
+
         var reservaPendente = reservas.Find(r => r.Estado == EstadoReserva.PENDENTE);
 
         if (reservaPendente != null)
@@ -72,12 +69,12 @@ public class Sistema
     public void GerarRelatorios()
     {
         Console.WriteLine("Gerar rlatorios do sistema");
-        
+
         Relatorio relatorio = new Relatorio();
-        
+
         relatorio.GerarRelatorioReservasPorEspaco();
         relatorio.GerarRelatorioPorPeriodo();
-        
+
         float taxa = relatorio.CalcularTaxaOcupacao();
         Console.WriteLine($"Taxa de Ocupação Geral: {taxa}%");
     }
