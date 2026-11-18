@@ -6,11 +6,15 @@ public class Espaco
     public string Localizacao { get; set; }
     public int CapacidadeMaxima { get; set; }
     public EstadoEspaco Estado { get; set; }
+    
+    public List<Equipamento> ListaE { get; set;}
+
+
 
     // Construtor
     public Espaco(int id, string nome, string tipoEspaco,
                   string localizacao, int capacidadeMaxima,
-                  EstadoEspaco estado)
+                  EstadoEspaco estado, equipamento)
     {
         Id = id;
         Nome = nome;
@@ -18,6 +22,8 @@ public class Espaco
         Localizacao = localizacao;
         CapacidadeMaxima = capacidadeMaxima;
         Estado = estado;
+        Equipamento = Equipamento;
+        ListaE = new List<Equipamento>() ;
     }
 
     public void AdicionarEspaco()
@@ -30,5 +36,15 @@ public class Espaco
 
     public void RemoverEspaco()
     {
+    }
+
+    public void adicionarEquipamento ()
+    {
+        
+    }
+
+      public void removerEquipamento ()
+    {
+        
     }
 }
