@@ -1,6 +1,6 @@
 using System;
 
-    public class 
+    public class Equipamento
     {
         private int id;
         private string nome;
