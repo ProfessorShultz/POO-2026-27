@@ -14,7 +14,7 @@ public class Espaco
     // Construtor
     public Espaco(int id, string nome, string tipoEspaco,
                   string localizacao, int capacidadeMaxima,
-                  EstadoEspaco estado, equipamento)
+                  EstadoEspaco estado)
     {
         Id = id;
         Nome = nome;
