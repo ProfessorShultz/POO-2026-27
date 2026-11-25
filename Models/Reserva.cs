@@ -1,88 +1,73 @@
 using System;
-    public class Reserva
+using System.Collections.Generic;
+using System.Linq;
+
+public class Reserva
+{
+    public int Id { get; set; }
+    public Utilizador Utilizador { get; set; }
+    public Espaco Espaco { get; set; }
+    public DateTime Data { get; set; }
+    public TimeSpan HoraInicio { get; set; }
+    public TimeSpan HoraFim { get; set; }
+    public EstadoReserva Estado { get; set; }
+
+    public Reserva()
     {
-        private int id;
-        private Utilizador utilizador;
-        private Espaco espaco;
-        private DateTime data;
-        private TimeSpan horaInicio;
-        private TimeSpan horaFim;
-        private EstadoReserva estado;
-
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
-
-        public Utilizador Utilizador
-        {
-            get { return utilizador; }
-            set { utilizador = value; }
-        }
-
-        public Espaco Espaco
-        {
-            get { return espaco; }
-            set { espaco = value; }
-        }
-
-        public DateTime Data
-        {
-            get { return data; }
-            set { data = value; }
-        }
-
-        public TimeSpan HoraInicio
-        {
-            get { return horaInicio; }
-            set { horaInicio = value; }
-        }
-
-        public TimeSpan HoraFim
-        {
-            get { return horaFim; }
-            set { horaFim = value; }
-        }
-
-        public EstadoReserva Estado
-        {
-            get { return estado; }
-            set { estado = value; }
-        }
-
-        public Reserva()
-        {
-            this.estado = EstadoReserva.PENDENTE;
-        }
-
-        public Reserva(int id, Utilizador utilizador, Espaco espaco, DateTime data, TimeSpan horaInicio, TimeSpan horaFim, EstadoReserva estado)
-        {
-            this.id = id;
-            this.utilizador = utilizador;
-            this.espaco = espaco;
-            this.data = data;
-            this.horaInicio = horaInicio;
-            this.horaFim = horaFim;
-            this.estado = estado;
-        }
-
-        public void criarReserva()
-        {
-            this.estado = EstadoReserva.PENDENTE;
-        }
-
-        public void alterarReserva()
-        {
-        }
-
-        public void cancelarReserva()
-        {
-            this.estado = EstadoReserva.CANCELADA;
-        }
-
-        public bool verificarConflitos()
-        {
-            return false;
-        }
+        Estado = EstadoReserva.PENDENTE;
     }
+
+    public Reserva(int id, Utilizador utilizador, Espaco espaco, DateTime data, TimeSpan horaInicio, TimeSpan horaFim, EstadoReserva estado)
+    {
+        if (utilizador == null)
+            throw new UnauthorizedAccessException("Tentativa de reserva sem autenticação.");
+        if (espaco == null)
+            throw new KeyNotFoundException("Espaço inexistente.");
+        if (horaFim <= horaInicio)
+            throw new ArgumentException("Dados inválidos: a hora de fim tem de ser depois da hora de início.");
+
+        Id = id;
+        Utilizador = utilizador;
+        Espaco = espaco;
+        Data = data;
+        HoraInicio = horaInicio;
+        HoraFim = horaFim;
+        Estado = estado;
+    }
+
+    public void criarReserva()
+    {
+        Estado = EstadoReserva.PENDENTE;
+    }
+
+    public void alterarReserva(DateTime novaData, TimeSpan novoInicio, TimeSpan novoFim)
+    {
+        if (novoFim <= novoInicio)
+            throw new ArgumentException("Dados inválidos: horário incorreto.");
+
+        Data = novaData;
+        HoraInicio = novoInicio;
+        HoraFim = novoFim;
+    }
+
+    public void cancelarReserva()
+    {
+        Estado = EstadoReserva.CANCELADA;
+    }
+
+    public bool verificarConflitos(List<Reserva> todasReservas)
+    {
+        if (todasReservas == null || Espaco == null)
+            return false;
+
+        return todasReservas.Any(r =>
+            r.Id != this.Id &&
+            r.Espaco != null &&
+            r.Espaco.Id == this.Espaco.Id &&
+            r.Data.Date == this.Data.Date &&
+            r.Estado != EstadoReserva.CANCELADA &&
+            r.Estado != EstadoReserva.EXPIRADA &&
+            (this.HoraInicio < r.HoraFim && this.HoraFim > r.HoraInicio)
+        );
+    }
+}

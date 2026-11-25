@@ -1,14 +1,26 @@
+using System;
+
 public class Utilizador
 {
     public int Id { get; set; }
     public string Nome { get; set; }
     public string Email { get; set; }
-    private string Password { get; set; }
+    public string Password { get; set; }
     public Perfil Perfil { get; set; }
 
-    // Construtor
+    public Utilizador()
+    {
+        Nome = string.Empty;
+        Email = string.Empty;
+        Password = string.Empty;
+        Perfil = Perfil.UTILIZADOR_NORMAL;
+    }
+
     public Utilizador(int id, string nome, string email, string password, Perfil perfil)
     {
+        if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            throw new ArgumentException("Dados inválidos: nome, email e password são obrigatórios.");
+
         Id = id;
         Nome = nome;
         Email = email;
@@ -16,24 +28,20 @@ public class Utilizador
         Perfil = perfil;
     }
 
-    // Métodos
     public void Registar()
     {
-
-           // Registar os dados do utilizador
-     Console.WriteLine("Utilizador registado com sucesso!");
-
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            throw new ArgumentException("Dados inválidos para registo.");
     }
 
-    public bool Login()
+    public bool Login(string emailInput, string passwordInput)
     {
-        return false;
+        return string.Equals(Email, emailInput, StringComparison.OrdinalIgnoreCase)
+               && Password == passwordInput;
     }
 
-    public void ConsultarPerfil()
+    public string ConsultarPerfil()
     {
-
+        return $"ID: {Id} | Nome: {Nome} | Email: {Email} | Perfil: {Perfil}";
     }
 }
-
-
